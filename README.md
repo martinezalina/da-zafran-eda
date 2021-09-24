@@ -21,13 +21,13 @@ Los datos son datos de ejemplo. Es decir, no son datos reales.
 
 ### Creación de Postgre Db
 
-Dentro de la carpeta `SQLs` se encuentran las tablas en csv. Para la creación de las mismas, se requiere ejecutar el archivo `00. Creacion de tablas - Subida Manual.sql`.
+Dentro de la carpeta `SQLs` se encuentran las tablas en csv (`SQLs\tablas_csv` ). Para la creación de las mismas, se requiere ejecutar el archivo `SQLs\00. Creacion de tablas - Subida Manual.sql`.
 
-Una vez cargado el contenido en la base de datos, se debe ejetutar el archivo `01. Creación de tablas BI.sql` el cual creará el SCHEMA de BI.
+Una vez cargado el contenido en la base de datos, se debe ejetutar el archivo `SQLs\01. Creación de tablas BI.sql` el cual creará el SCHEMA de BI.
 
 ### Análisis por SQL queries
 
-Para visualizar los resultados de las querys y/o hacer un seguimiento del análisis exploratorio realizado, se recomienda utilizar las consultas del aarchivo `02. Exploración.sql`.
+Para visualizar los resultados de las querys y/o hacer un seguimiento del análisis exploratorio realizado, se recomienda utilizar las consultas del aarchivo `SQLs\02. Exploración.sql`.
 
 ### Datasets resultantes
 
@@ -39,7 +39,7 @@ Este último es que que se utiliza para alimentar el dashboard de ventas.
 
 ## EDA en Jupyter Notebook
 
-Dentro de `Notebooks\` es posible acceder a dos notebooks de Jupyter en donde se realiza la primer lectura de los datos en `JupyterNotebook_prd_tablas.ipynb` y, el análisis exhaustivo del consolidado de ventas en `JupyterNotebook_prd_serie.ipynb`.
+Dentro de `Notebooks\` es posible acceder a dos notebooks de Jupyter en donde se realiza la primer lectura de los datos en `Notebooks\JupyterNotebook_prd_tablas.ipynb` y, el análisis exhaustivo del consolidado de ventas en `Notebooks\JupyterNotebook_prd_serie.ipynb`.
 
 > Aclaración: Para poder correr los notebooks, no es necesario levantar la Db en postgreSQL. Todos los datasets utilizados se encuentran en este repo.
 
