@@ -39,7 +39,7 @@ Este último es que que se utiliza para alimentar el dashboard de ventas.
 
 ## EDA en Jupyter Notebook
 
-Dentro de `notebooks\` es posible acceder a dos notebooks de Jupyter en donde se realiza la primer lectura de los datos en `JupyterNotebook_prd_tablas.ipynb` y, el análisis exhaustivo del consolidado de ventas en `JupyterNotebook_prd_serie.ipynb`.
+Dentro de `Notebooks\` es posible acceder a dos notebooks de Jupyter en donde se realiza la primer lectura de los datos en `JupyterNotebook_prd_tablas.ipynb` y, el análisis exhaustivo del consolidado de ventas en `JupyterNotebook_prd_serie.ipynb`.
 
 > Aclaración: Para poder correr los notebooks, no es necesario levantar la Db en postgreSQL. Todos los datasets utilizados se encuentran en este repo.
 
