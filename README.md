@@ -9,7 +9,7 @@ El objetivo de este proyecto es analizar **ingresos por ventas** de la Empresa Z
 Con el consolidado resultante (r00ventas.csv) se realizan dos modalidades de análisis:
 
 1. Vía SQL
-2. Vía python
+2. Vía python (notebooks)
 
 En ambos caminos se llega a las mismas conclusiones. Igualmente les recomendamos realizar una lectura de los notebooks ya que por su naturaleza son mucho más visuales.
 
@@ -31,16 +31,22 @@ Para visualizar los resultados de las querys y/o hacer un seguimiento del análi
 
 ### Datasets resultantes
 
-Una vez montada la db y generado el SCHEMA BI, se generó la exportación de los datasets consolidados de ventas.
-Los mismos se encuentran adjuntos en `notebooks\datasets\made\`.
+Una vez montada la db y generado el SCHEMA BI, se generó la exportación del dataset consolidado `r00_ventas.csv`.
 
-Allí podrán encontrar los dtos datasets creados. El primer consolidado de ventas y el segundo con el tratamiento de datos implementado.
+Una vez analizado, bajo las dos metodologías (SQL Queries y Python) se concluye generar un nuevo consolidado `r02_ventas_fix_sin_outliers.csv`.
 
-## Jupyter Notebook EDA
+Este último es que que se utiliza para alimentar el dashboard de ventas.
+
+## EDA en Jupyter Notebook
 
 Dentro de `notebooks\` es posible acceder a dos notebooks de Jupyter en donde se realiza la primer lectura de los datos en `JupyterNotebook_prd_tablas.ipynb` y, el análisis exhaustivo del consolidado de ventas en `JupyterNotebook_prd_serie.ipynb`.
 
-Para poder correr los notebooks, no es necesario levantar la Db en postgreSQL. Todos los datasets utilizados ya se encuentran en este repo.
+> Aclaración: Para poder correr los notebooks, no es necesario levantar la Db en postgreSQL. Todos los datasets utilizados se encuentran en este repo.
+
+Desde el último notebook se obtiene, entre otras cosas:
+
+- La descomposición de la serie BAR que nos permite analizar la tendencia y estacionalidad.
+- La correlación que existe entre las marcas.
 
 #### EDA checklist
 
