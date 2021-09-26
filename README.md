@@ -2,6 +2,11 @@
 
 #### Time Series Data Analytics
 
+## Sobre el proyecto
+
+El proyecto se focaliza en realizar un análisis exploratorio de datos con el fin de explorar, investigar y aprender.
+Luego de sumergirnos en los datos, estamos en condiciones de saber si es posible generar un dataset que pueda alimentar un dashboard. 
+
 ## Objetivo
 
 El objetivo de este proyecto es analizar **ingresos por ventas** de la Empresa Zafrán. Para ello se realiza la creación de una db en Postgre que contiene los datos originales de la empresa. Luego se procede a generar un esquema con tablas consolidadas. A posteriori se procede a analizar los datos.
