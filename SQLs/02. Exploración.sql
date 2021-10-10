@@ -23,12 +23,14 @@ select * from public.account_payment;
 -------------------------------------------------------------------------
 -- Exploro tablas del proyecto STOCK 
 
+select * from public.account_payment;
+select * from public.res_company;
+select * from public.res_currency_rate;
+
 select * from public.stock_quant;
 select * from public.stock_quant_move_rel;
-select * from public.stock_move;
-select * from public.stock_production_lot
+select * from public.stock_production_lot;
 select * from public.stock_location;
-
 
 SELECT * FROM public.stock_move ORDER BY id DESC;
 
