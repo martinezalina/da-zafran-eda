@@ -1,4 +1,4 @@
--- DB prd1
+-- DB prd1 y prd2
 
 -------------------------------------------------------------------------
 
@@ -11,6 +11,29 @@ select * from public.account_invoice_line;
 select * from public.account_invoice;
 select * from public.sale_order_line_invoice_rel;
 select * from public.sale_order_line;
+
+-------------------------------------------------------------------------
+
+-- Exploro tablas del proyecto FINANCIAL 
+
+select * from public.res_currency_rate;
+select * from public.res_company;
+select * from public.account_payment;
+
+-------------------------------------------------------------------------
+-- Exploro tablas del proyecto STOCK 
+
+select * from public.stock_quant;
+select * from public.stock_quant_move_rel;
+select * from public.stock_move;
+select * from public.stock_production_lot
+select * from public.stock_location;
+
+
+SELECT * FROM public.stock_move ORDER BY id DESC;
+
+-- Una vez corrido el script de BI
+select * from bi.stock_history;
 
 -------------------------------------------------------------------------
 

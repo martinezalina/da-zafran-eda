@@ -1,4 +1,4 @@
--- DB prd1
+-- DB prd1 y prd2
 
 ---------------- CREO EL ESQUEMA ----------------
 CREATE SCHEMA IF NOT EXISTS bi;
@@ -415,6 +415,7 @@ CREATE TABLE bi.r01_ventas_fix_sin_outliers AS(
 -- donde diga 'Ciudad Autónoma de Buenos Aires' en Ciudad, entonces provincia es 'Ciudad Autónoma de Buenos Aires'
 DROP TABLE IF EXISTS bi.r02_ventas_fix_sin_outliers;
 DROP TABLE IF EXISTS bi.r02_ventas_fix_sin_outliers;
+
 CREATE TABLE bi.r02_ventas_fix_sin_outliers AS(
 	SELECT 
 		*,
@@ -465,5 +466,71 @@ CREATE TABLE bi.r01_ventas_fix_sin_outliers_mensual_naive AS(
 		END AS date_periodo
 	FROM bi.r00_ventas_fix_sin_outliers_mensual_naive
 );
+
+
+
+
+------ TABLA STOCK
+
+
+------ 00. Creo la tabla final de stock
+DROP TABLE IF EXISTS bi.stock_history;
+CREATE table bi.stock_history AS
+ SELECT min(foo.id) AS id,
+    foo.move_id,
+    foo.location_id,
+    foo.company_id,
+    foo.product_id,
+    foo.product_categ_id,
+    foo.product_template_id,
+    sum(foo.quantity) AS quantity,
+    foo.date,
+    COALESCE((sum((foo.price_unit_on_quant * foo.quantity)) / NULLIF(sum(foo.quantity), (0)::double precision)), (0)::double precision) AS price_unit_on_quant,
+    foo.source,
+    string_agg(DISTINCT (foo.serial_number)::text, ', '::text ORDER BY (foo.serial_number)::text) AS serial_number
+   FROM ( SELECT stock_move.id,
+            stock_move.id AS move_id,
+            dest_location.id AS location_id,
+            dest_location.company_id,
+            stock_move.product_id,
+            product_template.id AS product_template_id,
+            product_template.categ_id AS product_categ_id,
+            quant.qty AS quantity,
+            stock_move.date,
+            quant.cost AS price_unit_on_quant,
+            stock_move.origin AS source,
+            stock_production_lot.name AS serial_number
+           FROM (((((((public.stock_quant quant
+             JOIN public.stock_quant_move_rel ON ((stock_quant_move_rel.quant_id = quant.id)))
+             JOIN public.stock_move ON ((stock_move.id = stock_quant_move_rel.move_id)))
+             LEFT JOIN public.stock_production_lot ON ((stock_production_lot.id = quant.lot_id)))
+             JOIN public.stock_location dest_location ON ((stock_move.location_dest_id = dest_location.id)))
+             JOIN public.stock_location source_location ON ((stock_move.location_id = source_location.id)))
+             JOIN public.product_product ON ((product_product.id = stock_move.product_id)))
+             JOIN public.product_template ON ((product_template.id = product_product.product_tmpl_id)))
+          WHERE ((quant.qty > (0)::double precision) AND ((stock_move.state)::text = 'done'::text) AND ((dest_location.usage)::text = ANY (ARRAY[('internal'::character varying)::text, ('transit'::character varying)::text])) AND ((NOT ((source_location.company_id IS NULL) AND (dest_location.company_id IS NULL))) OR (source_location.company_id <> dest_location.company_id) OR ((source_location.usage)::text <> ALL (ARRAY[('internal'::character varying)::text, ('transit'::character varying)::text]))))
+        UNION ALL
+         SELECT ('-1'::integer * stock_move.id) AS id,
+            stock_move.id AS move_id,
+            source_location.id AS location_id,
+            source_location.company_id,
+            stock_move.product_id,
+            product_template.id AS product_template_id,
+            product_template.categ_id AS product_categ_id,
+            (- quant.qty) AS quantity,
+            stock_move.date,
+            quant.cost AS price_unit_on_quant,
+            stock_move.origin AS source,
+            stock_production_lot.name AS serial_number
+           FROM (((((((public.stock_quant quant
+             JOIN public.stock_quant_move_rel ON ((stock_quant_move_rel.quant_id = quant.id)))
+             JOIN public.stock_move ON ((stock_move.id = stock_quant_move_rel.move_id)))
+             LEFT JOIN public.stock_production_lot ON ((stock_production_lot.id = quant.lot_id)))
+             JOIN public.stock_location source_location ON ((stock_move.location_id = source_location.id)))
+             JOIN public.stock_location dest_location ON ((stock_move.location_dest_id = dest_location.id)))
+             JOIN public.product_product ON ((product_product.id = stock_move.product_id)))
+             JOIN public.product_template ON ((product_template.id = product_product.product_tmpl_id)))
+          WHERE ((quant.qty > (0)::double precision) AND ((stock_move.state)::text = 'done'::text) AND ((source_location.usage)::text = ANY (ARRAY[('internal'::character varying)::text, ('transit'::character varying)::text])) AND ((NOT ((dest_location.company_id IS NULL) AND (source_location.company_id IS NULL))) OR (dest_location.company_id <> source_location.company_id) OR ((dest_location.usage)::text <> ALL (ARRAY[('internal'::character varying)::text, ('transit'::character varying)::text]))))) foo
+  GROUP BY foo.move_id, foo.location_id, foo.company_id, foo.product_id, foo.product_categ_id, foo.date, foo.source, foo.product_template_id;
 
 

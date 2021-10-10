@@ -5,7 +5,7 @@
 ## Sobre el proyecto
 
 El proyecto se focaliza en realizar un análisis exploratorio de datos con el fin de explorar, investigar y aprender.
-Luego de sumergirnos en los datos, estamos en condiciones de saber si es posible generar un dataset que pueda alimentar un dashboard. 
+Luego de sumergirnos en los datos, estamos en condiciones de saber si es posible generar un dataset que pueda alimentar un dashboard.
 
 ## Objetivo
 
