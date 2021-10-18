@@ -473,7 +473,7 @@ CREATE TABLE bi.r01_ventas_fix_sin_outliers_mensual_naive AS(
 ------ TABLA STOCK
 
 
------- 00. Creo la tabla final de stock
+------ 00. Creo la tabla de stock
 DROP TABLE IF EXISTS bi.stock_history;
 CREATE table bi.stock_history AS
  SELECT min(foo.id) AS id,
@@ -483,7 +483,6 @@ CREATE table bi.stock_history AS
     foo.product_id,
     foo.product_categ_id,
     foo.product_template_id,
-	--foo.product_template_name,
     sum(foo.quantity) AS quantity,
     foo.date,
     COALESCE((sum((foo.price_unit_on_quant * foo.quantity)) / NULLIF(sum(foo.quantity), (0)::double precision)), (0)::double precision) AS price_unit_on_quant,
@@ -496,7 +495,6 @@ CREATE table bi.stock_history AS
             stock_move.product_id,
             product_template.id AS product_template_id,
             product_template.categ_id AS product_categ_id,
-		 	--product_template.name AS product_template_name,
             quant.qty AS quantity,
             stock_move.date,
             quant.cost AS price_unit_on_quant,
@@ -555,5 +553,15 @@ CREATE TABLE bi.stock_history_1 AS(
 		ON a.product_categ_id = cat.id
 );
 
+
+
+-------------------------------------------
+DROP TABLE IF EXISTS bi.stock_history_complete;
+CREATE TABLE bi.stock_history_complete AS( 
+	SELECT b.name, b.type, a.* 
+	FROM bi.stock_history AS a 
+	LEFT JOIN bi.d06_maestro_productos AS b
+	on a.product_id=b.product_id
+);
 
 
