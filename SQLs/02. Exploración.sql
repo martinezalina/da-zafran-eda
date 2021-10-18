@@ -5,6 +5,7 @@
 -- Exploro tablas del proyecto
 select * from public.product_product;
 select * from public.product_template;
+select * from public.product_category;
 select * from public.account_account;
 select * from public.account_account where id in (167,168,169,166,666,668);
 select * from public.account_invoice_line;
@@ -36,6 +37,7 @@ SELECT * FROM public.stock_move ORDER BY id DESC;
 
 -- Una vez corrido el script de BI
 select * from bi.stock_history;
+select * from bi.stock_history_1;
 
 -------------------------------------------------------------------------
 

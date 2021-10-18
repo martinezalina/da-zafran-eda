@@ -483,6 +483,7 @@ CREATE table bi.stock_history AS
     foo.product_id,
     foo.product_categ_id,
     foo.product_template_id,
+	--foo.product_template_name,
     sum(foo.quantity) AS quantity,
     foo.date,
     COALESCE((sum((foo.price_unit_on_quant * foo.quantity)) / NULLIF(sum(foo.quantity), (0)::double precision)), (0)::double precision) AS price_unit_on_quant,
@@ -495,6 +496,7 @@ CREATE table bi.stock_history AS
             stock_move.product_id,
             product_template.id AS product_template_id,
             product_template.categ_id AS product_categ_id,
+		 	--product_template.name AS product_template_name,
             quant.qty AS quantity,
             stock_move.date,
             quant.cost AS price_unit_on_quant,
@@ -532,5 +534,25 @@ CREATE table bi.stock_history AS
              JOIN public.product_template ON ((product_template.id = product_product.product_tmpl_id)))
           WHERE ((quant.qty > (0)::double precision) AND ((stock_move.state)::text = 'done'::text) AND ((source_location.usage)::text = ANY (ARRAY[('internal'::character varying)::text, ('transit'::character varying)::text])) AND ((NOT ((dest_location.company_id IS NULL) AND (source_location.company_id IS NULL))) OR (dest_location.company_id <> source_location.company_id) OR ((dest_location.usage)::text <> ALL (ARRAY[('internal'::character varying)::text, ('transit'::character varying)::text]))))) foo
   GROUP BY foo.move_id, foo.location_id, foo.company_id, foo.product_id, foo.product_categ_id, foo.date, foo.source, foo.product_template_id;
+
+
+
+
+-------------------------------------------
+DROP TABLE IF EXISTS bi.stock_history_1;
+CREATE TABLE bi.stock_history_1 AS(
+	SELECT 
+		a.*,
+		tmlp.name AS product_template_name,
+		cat.name AS product_category_name
+	FROM bi.stock_history AS a
+	LEFT JOIN
+		public.product_template as tmlp
+		ON a.product_template_id = tmlp.id
+	LEFT JOIN
+		public.product_category as cat
+		ON a.product_categ_id = cat.id
+);
+
 
 
