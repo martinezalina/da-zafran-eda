@@ -544,6 +544,7 @@ CREATE TABLE bi.stock_history_1 AS(
 	SELECT 
 		a.*,
 		tmlp.name AS product_template_name,
+		tmlp.sale_ok AS product_template_sale_ok,
 		cat.name AS product_category_name
 	FROM bi.stock_history AS a
 	LEFT JOIN
