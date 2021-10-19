@@ -470,10 +470,10 @@ CREATE TABLE bi.r01_ventas_fix_sin_outliers_mensual_naive AS(
 
 
 
------- TABLA STOCK
+------ TABLAS STOCK
 
 
------- 00. Creo la tabla de stock
+------ 00. Creo la tabla de stock_history
 DROP TABLE IF EXISTS bi.stock_history;
 CREATE table bi.stock_history AS
  SELECT min(foo.id) AS id,
@@ -534,16 +534,15 @@ CREATE table bi.stock_history AS
   GROUP BY foo.move_id, foo.location_id, foo.company_id, foo.product_id, foo.product_categ_id, foo.date, foo.source, foo.product_template_id;
 
 
-
-
--------------------------------------------
-DROP TABLE IF EXISTS bi.stock_history_1;
-CREATE TABLE bi.stock_history_1 AS(
+------ 00. Creo la tabla de stock_history_complete
+DROP TABLE IF EXISTS bi.stock_history_complete;
+CREATE TABLE bi.stock_history_complete AS(
 	SELECT 
-		a.*,
 		tmlp.name AS product_template_name,
+		tmlp.type AS product_template_type,
 		tmlp.sale_ok AS product_template_sale_ok,
-		cat.name AS product_category_name
+		cat.name AS product_category_name,
+		a.*
 	FROM bi.stock_history AS a
 	LEFT JOIN
 		public.product_template as tmlp
@@ -551,17 +550,6 @@ CREATE TABLE bi.stock_history_1 AS(
 	LEFT JOIN
 		public.product_category as cat
 		ON a.product_categ_id = cat.id
-);
-
-
-
--------------------------------------------
-DROP TABLE IF EXISTS bi.stock_history_complete;
-CREATE TABLE bi.stock_history_complete AS( 
-	SELECT b.name, b.type, a.* 
-	FROM bi.stock_history AS a 
-	LEFT JOIN bi.d06_maestro_productos AS b
-	on a.product_id=b.product_id
 );
 
 

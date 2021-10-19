@@ -37,52 +37,10 @@ SELECT * FROM public.stock_move ORDER BY id DESC;
 
 -- Una vez corrido el script de BI
 select * from bi.stock_history;
-select * from bi.stock_history_1;
 select * from bi.stock_history_complete;
 
-
-
--------------------------------
-
 select distinct product_categ_id FROM bi.stock_history_complete;
-
 select distinct type FROM bi.stock_history_complete;
-
--------------------------------
-		
---¿Cuántos productos quebraron stocks en 2019?
---Quebrar stock significa no tener productos cuando se genera una venta, 
---lo cual significa que la cantidad de stock requerido pasa a estar en negativo.
--- =241
-
-select count (distinct product_id) 
-from bi.stock_history_complete 
-where date_part('year',date)=2019 and quantity<0
-
-
-----¿Cuál es el producto que más valor en stock tuvo en 2019? (Puedes
---usar el precio promedio del producto del año u otra métrica que
----consideres válida para el precio)
----De las tablas del Sprint Project 01, extraer el precio por producto y agregarlo a la tabla
----que venimos utilizando. El producto con mayor valor lo obtenemos de la multiplicación
---de quantity * precio.
---MAX=$632,162.119,68 Barra caju y semillas de zapallo x 28g
-
-SELECT --	name,
-		MAX(price_per_product)
-FROM
-(SELECT 	name,
- 			b.price_unit,
-			a.quantity,
-			(a.quantity*b.price_unit) AS price_per_product
-FROM bi.stock_history_complete a
-LEFT JOIN bi.r00_ventas b ON a.product_id=b.product_id
-group by 1,2,3) AS q1
-group by 1
-ORDER BY 2
-
-
-
 
 -------------------------------------------------------------------------
 
@@ -350,3 +308,37 @@ SELECT * FROM bi.r00_ventas_fix_sin_outliers WHERE left(periodo,4) = '2020';
 
 -------------------------------------------------------------------------
 
+-- Exploro Stock 2019
+
+--- ¿Cuántos productos quebraron stocks en 2019?
+
+-- Quebrar stock significa no tener productos cuando se genera una venta, 
+-- lo cual significa que la cantidad de stock requerido pasa a estar en negativo.
+
+-- =241
+
+select count (distinct product_id) 
+from bi.stock_history_complete 
+where date_part('year',date)=2019 and quantity<0
+
+
+--- ¿Cuál es el producto que más valor en stock tuvo en 2019? 
+
+-- (Se puede utilizar el precio promedio del producto del año u otra métrica que se considere válida para el precio)
+-- De las tablas del Sprint Project 01, extraer el precio por producto y agregarlo a la tabla
+-- que venimos utilizando. El producto con mayor valor lo obtenemos de la multiplicación de quantity * precio.
+
+-- MAX=$632,162.119,68 Barra caju y semillas de zapallo x 28g
+
+SELECT --	name,
+		MAX(price_per_product)
+FROM
+(SELECT 	name,
+ 			b.price_unit,
+			a.quantity,
+			(a.quantity*b.price_unit) AS price_per_product
+FROM bi.stock_history_complete a
+LEFT JOIN bi.r00_ventas b ON a.product_id=b.product_id
+group by 1,2,3) AS q1
+group by 1
+ORDER BY 2
